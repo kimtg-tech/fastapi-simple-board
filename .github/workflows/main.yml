@@ -1,4 +1,4 @@
-name: Test Workflow
+name: Deploy to Server
 
 on:
   push:
@@ -6,8 +6,24 @@ on:
       - main
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Print message
-        run: echo "Hello, GitHub Actions!"
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t fastapi-simple-board .
+
+      - name: SSH and deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_KEY }}
+          script: |
+            docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker pull fastapi-simple-board || true
+            docker stop fastapi-simple-board || true
+            docker rm fastapi-simple-board || true
+            docker run -d -p 8001:8001 --name fastapi-simple-board fastapi-simple-board
