@@ -1,0 +1,27 @@
+
+@hostname = http://localhost:8001
+
+#GET {{hostname}}
+
+## vscode extention으로 REST Client 설치후 테스트 실행 (Postman 대체)
+
+#GET http://localhost:8001/
+
+
+#POST http://localhost:8001/
+#Content-Type: application/json
+#{
+#    "message" : "hello world~"
+#}
+
+
+POST {{hostname}}/users
+Content-Type: application/json;
+
+{
+    "name": "tgkim",
+    "email": "ktgstar@nate.com",
+    "password": "123"
+}
+
+

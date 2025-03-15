@@ -1,2 +1,7 @@
 fastapi
 uvicorn
+py-ulid
+passlib[bcrypt]
+sqlalcehmy
+mysqlclient
+alembic
